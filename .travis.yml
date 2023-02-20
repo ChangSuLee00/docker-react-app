@@ -1,0 +1,24 @@
+sudo: required
+# 관리자 권한으로 컨트롤
+
+language: generic
+# 언어 설정
+
+services:
+  - docker
+# docker 환경으로 실행
+
+before_install:
+  # 텍스트 출력
+  - echo "start creating an image with dockerfile"
+  # 스크립트를 실행할 수 있는 환경 설정
+  # 도커파일을 이용해 이미지를 만들어준다
+  - docker build -t cslee/docker-react-app -f Dockerfile.dev .
+
+script:
+  # 실행할 스크립트
+  - docker run -e CI=true cslee/docker-react-app npm run test -- --coverage
+
+after_success:
+  # 테스트 성공 후 할 일
+  - echo "Test Success"
